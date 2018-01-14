@@ -1,8 +1,11 @@
 package com.carroll.michael.linkbus;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.constraint.ConstraintLayout;
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,19 +16,28 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     public final String scheduleURL = "https://apps.csbsju.edu/busschedule/";
+    public final String remoteMessageURL = "https://raw.githubusercontent.com/michaelcarroll/linkbus/master/snackbarMessage.html";
+
     public boolean goreckiToSexton, sextonToGorecki, eastToSexton, goreckiToAlcuin, alcuinToGorecki = false;
     public ArrayList<String> gts, stg, ets, gta, atg;
     public TextView gtsDisplay, stgDisplay, etsDisplay, gtaDisplay, atgDisplay;
 
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    public ConstraintLayout constraintLayout;
+    public SwipeRefreshLayout mSwipeRefreshLayout;
+
+    // snackbar messages replace "toast" messages in Android
+    public Snackbar snackbarMessage;
+    public String remoteMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        constraintLayout = findViewById(R.id.constraintLayout);
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -174,11 +186,27 @@ public class MainActivity extends Activity {
                     System.out.println("Gorecki to Alcuin " + gta); // temporary readout of gta array
                     System.out.println("Alcuin to Gorecki " + atg); // temporary readout of atg array
 
+                     url = new URL(remoteMessageURL);
+
+                    //Reads all text returned by server
+                    in = new BufferedReader(new InputStreamReader(url.openStream()));
+                    str = null;
+
+                    // reads HTML of URL line by line
+                    while ((str = in.readLine()) != null) {
+                        if (str.contains("output:")){
+                            System.out.println(str);
+                            remoteMessage = str.split(":")[1];
+                        }
+                    }
+
                     generateUI();
 
                 } catch (MalformedURLException e) {
                 } catch (IOException e) {
+                    Snackbar.make(constraintLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();
                 }
+
             }
         }).start();
 
@@ -241,14 +269,17 @@ public class MainActivity extends Activity {
                     atgDisplay.setText(temp);
                 }
 
-                //sample.setText((CharSequence) gts.get(0));
 
-                // sets up graphical user interface
-                //ImageView image;
 
-                //image = (ImageView) findViewById(R.id.sextonImageView);
-                //image.setImageResource(R.drawable.sexton);
+            if (!(goreckiToSexton && sextonToGorecki && eastToSexton && goreckiToAlcuin && alcuinToGorecki)) {
+                    // if there are no buses, snackbar message is displayed
+                Snackbar.make(constraintLayout, "No buses scheduled for today :(", Snackbar.LENGTH_LONG).show();
+            }
 
+            // if remoteMessage is not null, developer has specified a message to be broadcasted via snackbar message in app
+            if (remoteMessage != null) {
+                Snackbar.make(constraintLayout, remoteMessage, Snackbar.LENGTH_LONG).show();
+            }
             }
         });
     }
