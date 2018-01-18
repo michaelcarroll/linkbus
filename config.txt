@@ -1,12 +1,12 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar:enabled
-snackbarOutput:Classes are shortened today.
+snackbar=enabled
+snackbarOutput=Classes are shortened today.
 
-snackbarAction:enabled
-snackbarURL:http://www.csbsju.edu/registrar/calendars/mlk-day/
-snackbarActionText:View Schedule
+snackbarAction=enabled
+snackbarURL=http://www.csbsju.edu/registrar/calendars/mlk-day/
+snackbarActionText=View Schedule
 
 end
 
