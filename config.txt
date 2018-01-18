@@ -2,9 +2,9 @@
 
 
 snackbar=enabled
-snackbarOutput=Classes are shortened today.
+snackbarOutput=Welcome back to campus 🏫.
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=http://www.csbsju.edu/registrar/calendars/mlk-day/
 snackbarActionText=View Schedule
 
