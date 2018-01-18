@@ -2,7 +2,7 @@
 
 
 snackbar=enabled
-snackbarOutput=Welcome back to campus 🏫.
+snackbarOutput=Welcome back to campus 👊🏫
 
 snackbarAction=disabled
 snackbarURL=http://www.csbsju.edu/registrar/calendars/mlk-day/
