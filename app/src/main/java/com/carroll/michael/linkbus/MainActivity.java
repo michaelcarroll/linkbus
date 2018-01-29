@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 targetDate = Calendar.getInstance(); // sets to today's date
                 targetDate.add(Calendar.DATE, position); // advances target date
                 refreshContent();
-                Snackbar.make(coordinatorLayout, "Viewing schedule for a future date.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, "Caution: Day advancement is currently buggy.", 10*1000).show();
                 break;
         }
     }
