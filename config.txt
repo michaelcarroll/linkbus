@@ -1,1 +1,24 @@
-**Live** configuration file for Linkbus application...Changes effect all users immediately.
+**Live** configuration file for Linkbus application...changes effect all users immediately.
+
+
+snackbar=disabled
+snackbarOutput=
+
+snackbarAction=disabled
+snackbarURL=
+snackbarActionText=
+
+end
+
+
+HELP:
+________
+snackbar - enabled or disabled
+snackbarOutput - *required if enabled*
+
+snackbarAction - enabled or disabled
+snackbarURL - *required if enabled*
+snackbarActionText - text of button
+
+end - program stops here when reading text file to prevent wasting time
+________
