@@ -2,10 +2,10 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=enabled
+snackbar=disabled
 snackbarOutput=Classes are shortened today.
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=http://google.com
 snackbarActionText=VIEW SCHEDULE
 
