@@ -5,7 +5,7 @@
 snackbar=enabled
 snackbarOutput=Classes are shortened today.
 
-snackbarAction=disabled
+snackbarAction=enabled
 snackbarURL=http://google.com
 snackbarActionText=VIEW SCHEDULE
 
