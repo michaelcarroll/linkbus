@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setElevation(4.0f);
 
         Spinner spinner = findViewById(R.id.dayChooser);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this,
@@ -626,6 +627,8 @@ public class MainActivity extends AppCompatActivity {
             arrival.set(Calendar.MINUTE, startTimeMin);
             arrival.set(Calendar.SECOND, 0);
 
+            long differenceInMillis = arrival.getTimeInMillis() - currentTime.getTimeInMillis();
+
             if (firstTime.contains("AM"))
                 arrival.set(Calendar.AM_PM, Calendar.AM);
             else
@@ -647,9 +650,9 @@ public class MainActivity extends AppCompatActivity {
             else
                 departure.set(Calendar.AM_PM, Calendar.PM);
 
-            long differenceInMillis = arrival.getTimeInMillis() - currentTime.getTimeInMillis();
+            System.out.println(differenceInMillis <= 0);
 
-            if (differenceInMillis <= 0){ // bus has arrived and is in pickup range
+            if (differenceInMillis < 0){ // bus has arrived and is in pickup range
                 differenceInMillis = departure.getTimeInMillis() - currentTime.getTimeInMillis();
                 int minutesUntilDeparture = (int)(differenceInMillis / 1000 / 60) + 1;
                 return ("Busses running. Last bus departs in " + minutesUntilDeparture + " min.");

@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.AppBarLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.carroll.michael.linkbus.MainActivity">
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    android:elevation="4dp"
+    android:theme="@style/AppTheme.AppBarOverlay"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,8 +23,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="26dp"
                     android:layout_weight="1"
-                    android:minWidth="0dp"
                     android:gravity="left|center_vertical"
+                    android:minWidth="0dp"
                     android:textSize="?attr/actionBarSize" />
 
             </LinearLayout>
@@ -52,6 +47,3 @@
         </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-
-</android.support.design.widget.CoordinatorLayout>
