@@ -1,16 +1,25 @@
-Development configuration file for Linkbus application...changes will not effect production build
-  
-  
- -snackbar=enabled
- -snackbarOutput=Classes are shortened today.
- +snackbar=disabled
- +snackbarOutput=
-  
- -snackbarAction=enabled
- -snackbarURL=http://www.csbsju.edu/registrar/calendars/mlk-day/
- -snackbarActionText=View Schedule
- +snackbarAction=disabled
- +snackbarURL=
- +snackbarActionText=
-  
-  end
+
+**Live** configuration file for Linkbus application...changes effect all users immediately.
+
+
+snackbar=enabled
+snackbarOutput=Classes are shortened today.
+
+snackbarAction=disabled
+snackbarURL=http://google.com
+snackbarActionText=VIEW SCHEDULE
+
+end
+
+
+HELP:
+________
+snackbar - enabled or disabled
+snackbarOutput - *required if enabled*
+
+snackbarAction - enabled or disabled
+snackbarURL - *required if enabled*
+snackbarActionText - text of button
+
+end - program stops here when reading text file to prevent wasting time
+________
