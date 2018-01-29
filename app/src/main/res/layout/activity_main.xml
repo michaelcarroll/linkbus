@@ -1,162 +1,332 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context="com.carroll.michael.linkbus.MainActivity">
+    android:id="@+id/coordinatorLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp">
+        android:orientation="vertical">
 
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp">
+        <include
+            layout="@layout/app_bar_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-            <LinearLayout
-                android:animateLayoutChanges="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/textView13"
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="Gorecki to Sexton"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="8sp"
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/gtsCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="8dp"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="@color/linkbus_dark"
+                        app:cardCornerRadius="6dp">
 
-                <ProgressBar
-                    android:id="@+id/progressBar5"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:progress="0" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView15"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="Sexton to Gorecki"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/textView16"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="8sp"
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Gorecki to Sexton"
+                                    android:textColor="@color/cardview_light_background"
+                                    android:textSize="18sp" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar6"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:progress="0" />
+                                <TextView
+                                    android:id="@+id/nextBusGtsTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Next bus arrives in"
+                                    android:textColor="#555"
+                                    android:textStyle="italic" />
+                            </LinearLayout>
 
-                <TextView
-                    android:id="@+id/textView17"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="CSB East to Gorecki/Sexton"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView18"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="8sp"
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
+                                <TextView
+                                    android:id="@+id/gtsTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="6sp"
+                                    android:layout_marginBottom="10dp"
+                                    android:textAlignment="center"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+                        </LinearLayout>
 
-                <ProgressBar
-                    android:id="@+id/progressBar7"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:progress="0" />
+                    </android.support.v7.widget.CardView>
 
-                <TextView
-                    android:id="@+id/textView19"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="Gorecki to Alcuin"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/stgCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="0dp"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="@color/linkbus_dark"
+                        app:cardCornerRadius="6dp">
 
-                <TextView
-                    android:id="@+id/textView20"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="8sp"
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
 
-                <ProgressBar
-                    android:id="@+id/progressBar8"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:progress="0" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView21"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="Alcuin to Gorecki"
-                    android:textAlignment="center"
-                    android:textAllCaps="false"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:typeface="normal" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp">
 
-                <TextView
-                    android:id="@+id/textView22"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingExtra="8sp"
-                    android:textAlignment="center"
-                    android:textSize="14sp" />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Sexton to Gorecki"
+                                    android:textColor="@color/cardview_light_background"
+                                    android:textSize="18sp" />
 
-            </LinearLayout>
-        </ScrollView>
+                                <TextView
+                                    android:id="@+id/nextBusStgTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Next bus arrives in "
+                                    android:textColor="#555"
+                                    android:textStyle="italic" />
+                            </LinearLayout>
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+                                <TextView
+                                    android:id="@+id/stgTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="6sp"
+                                    android:layout_marginBottom="10dp"
+                                    android:textAlignment="center"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/etsCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="0dp"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="@color/linkbus_dark"
+                        app:cardCornerRadius="6dp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="CSB East to Gorecki/Sexton"
+                                    android:textColor="@color/cardview_light_background"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/nextBusEtsTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Next bus arrives in "
+                                    android:textColor="#555"
+                                    android:textStyle="italic" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/etsTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="6sp"
+                                    android:layout_marginBottom="10dp"
+                                    android:textAlignment="center"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/gtaCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="0dp"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="@color/linkbus_dark"
+                        app:cardCornerRadius="6dp">
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Gorecki to Alcuin"
+                                    android:textColor="@color/cardview_light_background"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/nextBusGtaTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Next bus arrives in "
+                                    android:textColor="#555"
+                                    android:textStyle="italic" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/gtaTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="6sp"
+                                    android:layout_marginBottom="10dp"
+                                    android:textAlignment="center"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/atgCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="0dp"
+                        android:visibility="invisible"
+                        app:cardBackgroundColor="@color/linkbus_dark"
+                        app:cardCornerRadius="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Alcuin to Gorecki"
+                                    android:textColor="@color/cardview_light_background"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/nextBusAtgTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Next bus arrives in "
+                                    android:textColor="#555"
+                                    android:textStyle="italic" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/atgTextView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:lineSpacingExtra="6sp"
+                                    android:layout_marginBottom="10dp"
+                                    android:textAlignment="center"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+            </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

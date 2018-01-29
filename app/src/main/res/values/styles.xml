@@ -5,12 +5,27 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.Linkbus" parent="Theme.AppCompat" >
+    <style name="Theme.Linkbus" parent="Theme.AppCompat.NoActionBar" >
         <item name="android:colorPrimary">@color/primary_material_dark</item>
         <item name="android:colorPrimaryDark">@color/primary_dark_material_dark</item>
         <item name="android:colorAccent">@android:color/holo_blue_dark</item>
-        <item name="android:colorBackground">@color/background_material_dark</item>
-        <item name="android:statusBarColor">@color/primary_dark_material_dark</item>
+        <item name="android:colorBackground">@color/linkbus_background</item>
+        <item name="android:statusBarColor">@color/linkbus_darker</item>
+        <item name="android:navigationBarColor">@color/linkbus_dark</item>
+        <item name="colorPrimary">@color/linkbus_dark</item>
+        <item name="colorPrimaryDark">@color/linkbus_darker</item>
+        <item name="colorAccent">@color/linkbus_accent</item>
+        <item name="android:windowBackground">@color/linkbus_background</item>
     </style>
+
+    <style name="PrimaryFlatButton" parent="Theme.AppCompat">
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless.Colored</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorAccent">@color/accent_material_dark</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="Theme.Linkbus" />
+
+    <style name="AppTheme.PopupOverlay" parent="Theme.Linkbus" />
 
 </resources>

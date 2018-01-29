@@ -6,4 +6,11 @@
     <color name="primary_material_dark">#0f4354</color>
     <color name="primary_dark_material_dark">#052632</color>
     <color name="background_material_dark">#212121</color>
+    <color name="navBar">#123241</color>
+    <color name="linkbus_navBar">#123241</color>
+    <color name="linkbus_statusBar">#0a1e27</color>
+    <color name="linkbus_dark">#123241</color>
+    <color name="linkbus_darker">#0a1e27</color>
+    <color name="linkbus_background">#222222</color>
+    <color name="linkbus_accent">#797979</color>
 </resources>

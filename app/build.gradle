@@ -7,8 +7,8 @@ android {
         applicationId "com.carroll.michael.linkbus"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 2
-        versionName "0.2a"
+        versionCode 3
+        versionName "0.3a"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
