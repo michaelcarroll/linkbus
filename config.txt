@@ -1,12 +1,12 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disabled
-snackbarOutput=
+snackbar=enabled
+snackbarOutput=Byte me!
 
-snackbarAction=disabled
-snackbarURL=
-snackbarActionText=
+snackbarAction=enabled  
+snackbarURL=http://csbsju.edu/
+snackbarActionText=WEBSITE
 
 end
 
