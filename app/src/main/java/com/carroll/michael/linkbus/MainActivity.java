@@ -2,40 +2,38 @@ package com.carroll.michael.linkbus;
 
 import android.animation.Animator;
 import android.net.Uri;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Button;
 
 // snackBar URL
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
+import net.danlew.android.joda.JodaTimeAndroid;
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -53,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public CoordinatorLayout coordinatorLayout;
     public SwipeRefreshLayout mSwipeRefreshLayout;
 
-    private Calendar targetDate;
+    private DateTime targetDate;
     private Calendar currentTime = new GregorianCalendar();
     public String scheduleURL;
 
@@ -79,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        JodaTimeAndroid.init(this);
+
         scheduleURL = "https://apps.csbsju.edu/BusSchedule/";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -98,13 +98,13 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View v, int position, long id){
-                    daySelector(position);
-                }
+            public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
+                daySelector(position);
+            }
 
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent){
+            public void onNothingSelected(AdapterView<?> parent) {
                 // do nothing
             }
         });
@@ -165,11 +165,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void daySelector(int position){
+    public void daySelector(int position) {
         switch (position) {
             case 0:
                 scheduleURL = "https://apps.csbsju.edu/busschedule";
-                targetDate = Calendar.getInstance(); // sets to today's date
+                targetDate = DateTime.now(); // sets to today's date
                 if (gtsCard != null)
                     refreshContent();
                 break;
@@ -182,8 +182,8 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat format1 = new SimpleDateFormat("M/d/yyyy");
 
                 scheduleURL = "https://apps.csbsju.edu/busschedule/?date=" + daysBackend[position];
-                targetDate = Calendar.getInstance(); // sets to today's date
-                targetDate.add(Calendar.DATE, position); // advances target date
+                targetDate = DateTime.now(); // sets to today's date
+                targetDate = targetDate.plusDays(position);
                 refreshContent();
                 break;
         }
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Gets bus times for CSB East to Gorecki/Sexton and adds them to stg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (eastToSexton == true) && (goreckiToAlcuin == false)) {
+                        if ((str.contains("PM") || (str.contains("AM"))) && (eastToSexton == true) && (goreckiToAlcuin == false) && (alcuinToGorecki == false)) {
                             String time = str;
                             // uses regex to delete non-numeric characters, except for ":"
                             time = time.replaceAll("[^\\d:*-]", "");
@@ -302,14 +302,14 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 time = time + " AM";
                             }
-                            // Ensures Alcuin to Gorecki has the same number of times as Gorecki to Alcuin
-                            // Also makes sure program doesn't drift into Crossroads/Cash Wise bus times on the weekend days
-                            if (atg.size() < gta.size()) {
-                                atg.add(time);
-                            }
+                            atg.add(time);
                         }
 
+                        if (str.contains("Crossroads"))
+                            break;
                     }
+
+
                     in.close();
                     System.out.println("Gorecki to Sexton " + gts); // temporary readout of gts array
                     System.out.println("Sexton to Gorecki " + stg); // temporary readout of stg array
@@ -559,19 +559,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void openCloseCard(View v, TextView textView, CardView cardView)
-    {
+    public void openCloseCard(View v, TextView textView, CardView cardView) {
         if (textView.getVisibility() == View.GONE) {
             //TransitionManager.beginDelayedTransition(cardView);
             textView.setVisibility(View.VISIBLE);
-        }
-        else
+        } else
             //TransitionManager.beginDelayedTransition(cardView);
             textView.setVisibility(View.GONE);
     }
 
-    public void refreshContent()
-    {
+    public void refreshContent() {
         resetGUI();
         backend();
         System.out.println(scheduleURL);
@@ -579,7 +576,7 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public void revealAnimation(CardView card){
+    public void revealAnimation(CardView card) {
         // previously invisible view
         View myView = card;
 
@@ -600,165 +597,98 @@ public class MainActivity extends AppCompatActivity {
 
     public String calculateBusTime(ArrayList<String> route) {
         String nextTime = route.get(0);
-        currentTime = Calendar.getInstance();
-        System.err.println("next bus arrives at " + route + " at:" + nextTime);
 
-        // for dealing with bus times with a range
-        if (nextTime.contains("-")){
-            String firstTime = nextTime.split("-")[0];
-            int startTimeHour = Integer.parseInt(firstTime.split(":")[0].replaceAll("[^0-9]", ""));
-            int startTimeMin = Integer.parseInt(firstTime.split(":")[1].replaceAll("[^0-9]", ""));
+        if (nextTime.contains("-")) { // if next bus time is a range of times
+            String arrivalTime = nextTime.split("-")[0]; // "*7:30 "
+            String departureTime = nextTime.split("-")[1]; // " 7:40 AM"
 
-            System.out.println("start range hour: " + startTimeHour);
-            System.out.println("start range min: " + startTimeMin);
+            // arrival time
+            int arrivalTimeHour = Integer.parseInt((arrivalTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
+            // convert to 24-hour time
+            if ((nextTime.contains("PM")) && (arrivalTimeHour != 12))
+                arrivalTimeHour += 12;
+            int arrivalTimeMinute = Integer.parseInt((arrivalTime.split(":")[1].replaceAll("\\D+", ""))); // minute (30)
 
+            // departure time
+            int departureTimeHour = Integer.parseInt((departureTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
+            // convert to 24-hour time
+            if ((nextTime.contains("PM")) && (departureTimeHour != 12))
+                departureTimeHour += 12;
+            int departureTimeMinute = Integer.parseInt((departureTime.split(":")[1].replaceAll("\\D+", ""))); // minute (40)
 
-            String secondTime = nextTime.split("-")[1];
-            int finishTimeHour = Integer.parseInt(secondTime.split(":")[0].replaceAll("[^0-9]", ""));
-            int finishTimeMin = Integer.parseInt(secondTime.split(":")[1].replaceAll("[^0-9]", ""));
+            DateTime now = DateTime.now();
 
-            System.out.println("end range hour: " + finishTimeHour);
-            System.out.println("end range min: " + finishTimeMin);
+            DateTime nextBusArrival = new DateTime()
+                    .withDayOfMonth(targetDate.getDayOfMonth())
+                    .withHourOfDay(arrivalTimeHour)
+                    .withMinuteOfHour(arrivalTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
+                    .withSecondOfMinute(0);
 
-            Calendar arrival = new GregorianCalendar();
-            arrival = targetDate;
-            arrival.set(Calendar.HOUR, startTimeHour);
-            arrival.set(Calendar.MINUTE, startTimeMin);
-            arrival.set(Calendar.SECOND, 0);
+            DateTime nextBusDeparture = new DateTime()
+                    .withDayOfMonth(targetDate.getDayOfMonth())
+                    .withHourOfDay(departureTimeHour)
+                    .withMinuteOfHour(departureTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
+                    .withSecondOfMinute(0);
 
-            long differenceInMillis = arrival.getTimeInMillis() - currentTime.getTimeInMillis();
+            Duration duration = new Duration(now, nextBusArrival);
+            Boolean hasArrived = false;
 
-            if (firstTime.contains("AM"))
-                arrival.set(Calendar.AM_PM, Calendar.AM);
-            else
-                arrival.set(Calendar.AM_PM, Calendar.PM);
+            System.out.println("duration - min :" + duration.getStandardMinutes());
 
-            Calendar departure = new GregorianCalendar();
-            departure = targetDate;
-            departure.set(Calendar.HOUR, finishTimeHour);
-            departure.set(Calendar.MINUTE, finishTimeMin);
-            departure.set(Calendar.SECOND, 0);
-
-            System.out.println("LOOK EHEREEE: " + arrival.getTime());
-
-            System.out.println("current time: " + currentTime.getTime());
-            System.out.println("next bus time range start: " + arrival.getTime());
-
-            if (secondTime.contains("AM"))
-                departure.set(Calendar.AM_PM, Calendar.AM);
-            else
-                departure.set(Calendar.AM_PM, Calendar.PM);
-
-            System.out.println(differenceInMillis <= 0);
-
-            if (differenceInMillis < 0){ // bus has arrived and is in pickup range
-                differenceInMillis = departure.getTimeInMillis() - currentTime.getTimeInMillis();
-                int minutesUntilDeparture = (int)(differenceInMillis / 1000 / 60) + 1;
-                return ("Busses running. Last bus departs in " + minutesUntilDeparture + " min.");
+            if (duration.getStandardMinutes() <= 0) {
+                hasArrived = true;
+                duration = new Duration(now, nextBusDeparture);
             }
-            // ______
-            else { // bus has not arrived yet
-                arrival = targetDate;
-                arrival.set(Calendar.HOUR, startTimeHour);
-                arrival.set(Calendar.MINUTE, startTimeMin);
-                arrival.set(Calendar.SECOND, 0); // re-sets data to arrival calendar since it was corrupt after making departure calendar... java bug?
 
-                differenceInMillis = arrival.getTimeInMillis() - currentTime.getTimeInMillis();
+            PeriodFormatter formatter = new PeriodFormatterBuilder() // formats time correctly for display
+                    .appendWeeks().appendSuffix(" weeks ")
+                    .appendDays().appendSuffix(" days ")
+                    .appendHours().appendSuffix(" hr ")
+                    .appendMinutes().appendSuffix(" min. ")
+                    .printZeroNever()
+                    .toFormatter();
 
-                int minutesUntilArrival = (int)(differenceInMillis / 1000 / 60) + 1; // minutes
-                int hoursUntilArrival = (int)differenceInMillis / 1000 / 60 / 60; // hours
-                int daysUntilArrival = (int)differenceInMillis / 1000 / 60 / 60 / 24; // days
+            String formattedDuration = formatter.print(duration.toPeriodFrom(now));
 
+            if (formattedDuration.length() > 0 && !hasArrived)
+                return ("Next bus arrives in " + formattedDuration);
+            else if (formattedDuration.length() > 0 && hasArrived)
+                return ("Busses running. Last bus departs in " + formattedDuration);
+        } else { // next bus time is singular
 
-                if (daysUntilArrival > 1) {
-                    if ((hoursUntilArrival - (24 * daysUntilArrival)) == 0)
-                        return ("Next bus arrives in " + daysUntilArrival + " days " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                    else
-                        return ("Next bus arrives in " + daysUntilArrival + " days " + (hoursUntilArrival - (24 * daysUntilArrival)) + " hr " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                }
+            int nextTimeHour = Integer.parseInt((nextTime.split(":")[0])); // hour
+            // convert to 24-hour time
+            if ((nextTime.contains("PM")) && (nextTimeHour != 12))
+                nextTimeHour += 12;
+            int nextTimeMinute = Integer.parseInt((nextTime.split(":")[1].replaceAll("\\D+", ""))); // minute
 
-                else if (daysUntilArrival == 1) {
-                    if ((hoursUntilArrival - (24 * daysUntilArrival)) == 0)
-                        return ("Next bus arrives in " + daysUntilArrival + " day " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                    else
-                        return ("Next bus arrives in " + daysUntilArrival + " day " + (hoursUntilArrival - (24 * daysUntilArrival)) + " hr " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                }
+            DateTime now = DateTime.now();
 
-                else if (hoursUntilArrival >= 1) {
-                    if ((minutesUntilArrival - (60 * hoursUntilArrival)) == 0)
-                        return ("Next bus arrives in " + hoursUntilArrival + " hr");
-                    else
-                        return ("Next bus arrives in " + hoursUntilArrival + " hr " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                }
-                else
-                    return ("Next bus arrives in " + minutesUntilArrival + " min.");
-            }
+            DateTime nextBus = new DateTime()
+                    .withDayOfMonth(targetDate.getDayOfMonth())
+                    .withHourOfDay(nextTimeHour)
+                    .withMinuteOfHour(nextTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
+                    .withSecondOfMinute(0);
+
+            Duration duration = new Duration(now, nextBus);
+
+            PeriodFormatter formatter = new PeriodFormatterBuilder() // formats time correctly for display
+                    .appendWeeks().appendSuffix(" weeks ")
+                    .appendDays().appendSuffix(" days ")
+                    .appendHours().appendSuffix(" hr ")
+                    .appendMinutes().appendSuffix(" min. ")
+                    .printZeroNever()
+                    .toFormatter();
+
+            String formattedDuration = formatter.print(duration.toPeriodFrom(now));
+
+            if (formattedDuration.length() > 0)
+                return ("Next bus arrives in " + formattedDuration);
+            else
+                return ("Bus arriving now");
         }
-        else { // next bus time is not a range of times
-            int arrivalTimeHour = Integer.parseInt(nextTime.split(":")[0].replaceAll("[^0-9]", ""));
-            int arrivalTimeMin = Integer.parseInt(nextTime.split(":")[1].replaceAll("[^0-9]", ""));
-
-            Calendar arrival = new GregorianCalendar();
-            arrival = targetDate;
-            arrival.set(Calendar.HOUR, arrivalTimeHour);
-            arrival.set(Calendar.MINUTE, arrivalTimeMin);
-            arrival.set(Calendar.SECOND, 0);
-
-            if (nextTime.contains("AM")) {
-                arrival.set(Calendar.AM_PM, Calendar.AM);
-                if (arrivalTimeHour == 12)
-                    arrival.set(Calendar.HOUR, 0);
-            }
-            else
-                arrival.set(Calendar.AM_PM, Calendar.PM);
-
-            System.out.println("current time: " + currentTime.getTime());
-            System.out.println("next bus time: " + arrival.getTime());
-
-            long differenceInMillis = arrival.getTimeInMillis() - currentTime.getTimeInMillis();
-            System.err.println("difference: " + differenceInMillis);
-
-            int minutesUntilArrival = (int)(differenceInMillis / 1000 / 60) + 1; // minutes
-            int hoursUntilArrival = (int)differenceInMillis / 1000 / 60 / 60; // hours
-            int daysUntilArrival = (int)differenceInMillis / 1000 / 60 / 60 / 24; // days
-
-
-            System.err.println(minutesUntilArrival);
-            System.err.println(hoursUntilArrival);
-            System.err.println(daysUntilArrival);
-
-            System.out.println("currentTime PM: " + ((currentTime.get(Calendar.AM_PM) == Calendar.PM)));
-            System.out.println("currentTime AM: " + ((currentTime.get(Calendar.AM_PM) == Calendar.AM)));
-            System.out.println("arrival PM: " + ((arrival.get(Calendar.AM_PM) == Calendar.PM)));
-            System.out.println("arrival AM: " + ((arrival.get(Calendar.AM_PM) == Calendar.AM)));
-
-            if ((currentTime.get(Calendar.AM_PM) == Calendar.PM) && (arrival.get(Calendar.AM_PM) == Calendar.AM))
-                arrival.add(Calendar.DATE, 1); // advances target date
-
-            if (daysUntilArrival > 1) {
-                if ((hoursUntilArrival - (24 * daysUntilArrival)) == 0)
-                    return ("Next bus arrives in " + daysUntilArrival + " days " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                else
-                    return ("Next bus arrives in " + daysUntilArrival + " days " + (hoursUntilArrival - (24 * daysUntilArrival)) + " hr " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-            }
-
-            else if (daysUntilArrival == 1) {
-                if ((hoursUntilArrival - (24 * daysUntilArrival)) == 0)
-                    return ("Next bus arrives in " + daysUntilArrival + " day " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-                 else
-                    return ("Next bus arrives in " + daysUntilArrival + " day " + (hoursUntilArrival - (24 * daysUntilArrival)) + " hr " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-            }
-
-            else if (hoursUntilArrival >= 1) {
-                if ((minutesUntilArrival - (60 * hoursUntilArrival)) == 0)
-                    return ("Next bus arrives in " + hoursUntilArrival + " hr");
-                else
-                    return ("Next bus arrives in " + hoursUntilArrival + " hr " + (minutesUntilArrival - (60 * hoursUntilArrival)) + " min.");
-            }
-            else
-                return ("Next bus arrives in " + minutesUntilArrival + " min.");
-            }
-        }
+        return null;
     }
+}
 
 
