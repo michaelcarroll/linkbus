@@ -1,8 +1,8 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disabled
-snackbarOutput=
+snackbar=enabled
+snackbarOutput=Happy Monday!
 
 snackbarAction=disabled
 snackbarURL=
