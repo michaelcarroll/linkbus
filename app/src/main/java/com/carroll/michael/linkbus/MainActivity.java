@@ -40,20 +40,39 @@ import java.util.GregorianCalendar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public final String remoteMessageURL = "https://raw.githubusercontent.com/michaelcarroll/linkbus/master/config.txt";
+    private final String remoteMessageURL = "https://raw.githubusercontent.com/michaelcarroll/linkbus/master/config.txt";
 
-    public boolean goreckiToSexton, sextonToGorecki, eastToSexton, goreckiToAlcuin, alcuinToGorecki = false;
-    public ArrayList<String> gts, stg, ets, gta, atg;
-    public TextView gtsTextView, stgTextView, etsTextView, gtaTextView, atgTextView;
-    public TextView nextBusGtsTextView, nextBusStgTextView, nextBusEtsTextView, nextBusGtaTextView, nextBusAtgTextView;
-    CardView gtsCard, gtaCard, etsCard, stgCard, atgCard;
+    private boolean goreckiToSexton;
+    private boolean sextonToGorecki;
+    private boolean eastToSexton;
+    private boolean goreckiToAlcuin;
+    private boolean alcuinToGorecki = false;
+    private ArrayList<String> gts;
+    private ArrayList<String> stg;
+    private ArrayList<String> ets;
+    private ArrayList<String> gta;
+    private ArrayList<String> atg;
+    private TextView gtsTextView;
+    private TextView stgTextView;
+    private TextView etsTextView;
+    private TextView gtaTextView;
+    private TextView atgTextView;
+    private TextView nextBusGtsTextView;
+    private TextView nextBusStgTextView;
+    private TextView nextBusEtsTextView;
+    private TextView nextBusGtaTextView;
+    private TextView nextBusAtgTextView;
+    private CardView gtsCard;
+    private CardView gtaCard;
+    private CardView etsCard;
+    private CardView stgCard;
+    private CardView atgCard;
 
-    public CoordinatorLayout coordinatorLayout;
-    public SwipeRefreshLayout mSwipeRefreshLayout;
+    private CoordinatorLayout coordinatorLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private DateTime targetDate;
-    private Calendar currentTime = new GregorianCalendar();
-    public String scheduleURL;
+    private String scheduleURL;
 
 
     private Spinner spinner;
@@ -64,14 +83,13 @@ public class MainActivity extends AppCompatActivity {
     // _____________________________________________________________________________________________
 
     // snackbar message protocol
-    public Snackbar snackbarMessage;
 
-    public boolean snackbarToggle;
-    public String snackbarOutput;
+    private boolean snackbarToggle;
+    private String snackbarOutput;
 
-    public boolean snackbarActionToggle;
-    public String snackbarURL;
-    public String snackbarActionText;
+    private boolean snackbarActionToggle;
+    private String snackbarURL;
+    private String snackbarActionText;
 
     // _____________________________________________________________________________________________
 
@@ -150,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void dayController() {
+    private void dayController() {
         Calendar dayAdvance = new GregorianCalendar();
         SimpleDateFormat format1 = new SimpleDateFormat("M/d/yyyy");
         SimpleDateFormat format2 = new SimpleDateFormat("MMMM d, yyyy");
@@ -165,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void daySelector(int position) {
+    private void daySelector(int position) {
         switch (position) {
             case 0:
                 scheduleURL = "https://apps.csbsju.edu/busschedule";
@@ -179,8 +197,6 @@ public class MainActivity extends AppCompatActivity {
             case 4:
             case 5:
             case 6:
-                SimpleDateFormat format1 = new SimpleDateFormat("M/d/yyyy");
-
                 scheduleURL = "https://apps.csbsju.edu/busschedule/?date=" + daysBackend[position];
                 targetDate = DateTime.now(); // sets to today's date
                 targetDate = targetDate.plusDays(position);
@@ -189,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void backend() {
+    private void backend() {
         // Network operations done on separate thread to prevent UI unresponsiveness
         new Thread(new Runnable() {
             @Override
@@ -216,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Gets bus times for Gorecki to Sexton and adds them to gts ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToSexton == true) && (sextonToGorecki == false)) {
+                        if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToSexton) && (!sextonToGorecki)) {
                             String time = str;
                             // uses regex to delete non-numeric characters, except for ":"
                             time = time.replaceAll("[^\\d:*-]", "");
@@ -235,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Gets bus times for Sexton to Gorecki and adds them to stg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (sextonToGorecki == true) && (eastToSexton == false)) {
+                        if ((str.contains("PM") || (str.contains("AM"))) && (sextonToGorecki) && (!eastToSexton)) {
                             String time = str;
                             // uses regex to delete non-numeric characters, except for ":"
                             time = time.replaceAll("[^\\d:*-]", "");
@@ -254,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Gets bus times for CSB East to Gorecki/Sexton and adds them to stg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (eastToSexton == true) && (goreckiToAlcuin == false) && (alcuinToGorecki == false)) {
+                        if ((str.contains("PM") || (str.contains("AM"))) && (eastToSexton) && (!goreckiToAlcuin) && (!alcuinToGorecki)) {
                             String time = str;
                             // uses regex to delete non-numeric characters, except for ":"
                             time = time.replaceAll("[^\\d:*-]", "");
@@ -273,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Gets bus times for Gorecki to Alcuin and adds them to gta ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToAlcuin == true) && (alcuinToGorecki == false)) {
+                        if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToAlcuin) && (!alcuinToGorecki)) {
                             String time = str;
                             // uses regex to delete non-numeric characters, except for ":"
                             time = time.replaceAll("[^\\d:*-]", "");
@@ -292,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         // Gets bus times for Alcuin to Gorecki and adds them to atg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (alcuinToGorecki == true)) {
+                        if ((str.contains("PM") || (str.contains("AM"))) && (alcuinToGorecki)) {
                             String time = str;
                             // uses regex to delete non-numeric characters, except for ":"
                             time = time.replaceAll("[^\\d:*-]", "");
@@ -366,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void generateUI() {
+    private void generateUI() {
         // Runs UI updating on main thread
         runOnUiThread(new Runnable() {
             @Override
@@ -514,7 +530,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void resetGUI() {
+    private void resetGUI() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -559,7 +575,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void openCloseCard(View v, TextView textView, CardView cardView) {
+    private void openCloseCard(View v, TextView textView, CardView cardView) {
         if (textView.getVisibility() == View.GONE) {
             //TransitionManager.beginDelayedTransition(cardView);
             textView.setVisibility(View.VISIBLE);
@@ -568,7 +584,7 @@ public class MainActivity extends AppCompatActivity {
             textView.setVisibility(View.GONE);
     }
 
-    public void refreshContent() {
+    private void refreshContent() {
         resetGUI();
         backend();
         System.out.println(scheduleURL);
@@ -576,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public void revealAnimation(CardView card) {
+    private void revealAnimation(CardView card) {
         // previously invisible view
         View myView = card;
 
@@ -595,7 +611,7 @@ public class MainActivity extends AppCompatActivity {
         anim.start();
     }
 
-    public String calculateBusTime(ArrayList<String> route) {
+    private String calculateBusTime(ArrayList<String> route) {
         String nextTime = route.get(0);
 
         if (nextTime.contains("-")) { // if next bus time is a range of times
@@ -605,15 +621,21 @@ public class MainActivity extends AppCompatActivity {
             // arrival time
             int arrivalTimeHour = Integer.parseInt((arrivalTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
             // convert to 24-hour time
-            if ((nextTime.contains("PM")) && (arrivalTimeHour != 12))
+            if ((nextTime.contains("PM")) && (arrivalTimeHour != 12)) // if nextTime is after 12:59PM, add 12 to convert to 24hr time
                 arrivalTimeHour += 12;
+            if ((nextTime.contains("AM")) && (arrivalTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
+                arrivalTimeHour -= 12;
+
             int arrivalTimeMinute = Integer.parseInt((arrivalTime.split(":")[1].replaceAll("\\D+", ""))); // minute (30)
 
             // departure time
             int departureTimeHour = Integer.parseInt((departureTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
             // convert to 24-hour time
-            if ((nextTime.contains("PM")) && (departureTimeHour != 12))
+            if ((nextTime.contains("PM")) && (departureTimeHour != 12)) // if nextTime is after 12:59PM, add 12 to convert to 24hr time
                 departureTimeHour += 12;
+            if ((nextTime.contains("AM")) && (departureTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
+                departureTimeHour -= 12;
+
             int departureTimeMinute = Integer.parseInt((departureTime.split(":")[1].replaceAll("\\D+", ""))); // minute (40)
 
             DateTime now = DateTime.now();
@@ -660,6 +682,9 @@ public class MainActivity extends AppCompatActivity {
             // convert to 24-hour time
             if ((nextTime.contains("PM")) && (nextTimeHour != 12))
                 nextTimeHour += 12;
+            if ((nextTime.contains("AM")) && (nextTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
+                nextTimeHour -= 12;
+
             int nextTimeMinute = Integer.parseInt((nextTime.split(":")[1].replaceAll("\\D+", ""))); // minute
 
             DateTime now = DateTime.now();

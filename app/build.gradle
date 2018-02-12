@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.carroll.michael.linkbus"
         minSdkVersion 21
-        targetSdkVersion 26
-        versionCode 6
-        versionName "0.4b"
+        targetSdkVersion 27
+        versionCode 7
+        versionName "0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -26,10 +26,10 @@ dependencies {
     })
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile "com.android.support:appcompat-v7:26.1.0"
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:support-v4:26.1.0'
+    compile "com.android.support:appcompat-v7:27.0.2"
+    compile 'com.android.support:cardview-v7:27.0.2'
+    compile 'com.android.support:design:27.0.2'
+    compile 'com.android.support:support-v4:27.0.2'
     compile 'net.danlew:android.joda:2.9.9.2'
 
 }
