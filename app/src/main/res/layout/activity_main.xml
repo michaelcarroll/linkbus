@@ -77,8 +77,9 @@
                                     android:id="@+id/gtsTextView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:lineSpacingExtra="6sp"
                                     android:layout_marginBottom="10dp"
+                                    android:fontFamily="sans-serif"
+                                    android:lineSpacingExtra="4sp"
                                     android:textAlignment="center"
                                     android:visibility="gone" />
                             </LinearLayout>
@@ -136,8 +137,8 @@
                                     android:id="@+id/stgTextView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:lineSpacingExtra="6sp"
                                     android:layout_marginBottom="10dp"
+                                    android:lineSpacingExtra="4sp"
                                     android:textAlignment="center"
                                     android:visibility="gone" />
 
@@ -196,8 +197,8 @@
                                     android:id="@+id/etsTextView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:lineSpacingExtra="6sp"
                                     android:layout_marginBottom="10dp"
+                                    android:lineSpacingExtra="4sp"
                                     android:textAlignment="center"
                                     android:visibility="gone" />
 
@@ -256,8 +257,8 @@
                                     android:id="@+id/gtaTextView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:lineSpacingExtra="6sp"
                                     android:layout_marginBottom="10dp"
+                                    android:lineSpacingExtra="4sp"
                                     android:textAlignment="center"
                                     android:visibility="gone" />
                             </LinearLayout>
@@ -314,8 +315,8 @@
                                     android:id="@+id/atgTextView"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:lineSpacingExtra="6sp"
                                     android:layout_marginBottom="10dp"
+                                    android:lineSpacingExtra="4sp"
                                     android:textAlignment="center"
                                     android:visibility="gone" />
                             </LinearLayout>

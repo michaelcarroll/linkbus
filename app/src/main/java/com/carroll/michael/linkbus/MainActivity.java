@@ -42,10 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
     private final String remoteMessageURL = "https://raw.githubusercontent.com/michaelcarroll/linkbus/master/config.txt";
 
-    private boolean goreckiToSexton;
-    private boolean sextonToGorecki;
-    private boolean eastToSexton;
-    private boolean goreckiToAlcuin;
+    private boolean goreckiToSexton = false;
+    private boolean sextonToGorecki = false;
+    private boolean eastToSexton = false;
+    private boolean goreckiToAlcuin = false;
     private boolean alcuinToGorecki = false;
     private ArrayList<String> gts;
     private ArrayList<String> stg;
@@ -337,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
 
                     //Reads all text returned by server
                     in = new BufferedReader(new InputStreamReader(url.openStream()));
-                    str = null;
 
                     //snackBar:
 
@@ -375,11 +374,8 @@ public class MainActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     Snackbar.make(coordinatorLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();
                 }
-
             }
         }).start();
-
-
     }
 
     private void generateUI() {
@@ -387,54 +383,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // Gorecki to Sexton
-                gtsTextView = findViewById(R.id.gtsTextView);
-                for (String element : gts) {
-                    String temp = (String) gtsTextView.getText();
-                    temp = (temp + "\n" + element);
-                    gtsTextView.setText(temp);
-                }
-
-                // Sexton to Gorecki
-                stgTextView = findViewById(R.id.stgTextView);
-                for (String element : stg) {
-                    String temp = (String) stgTextView.getText();
-                    temp = (temp + "\n" + element);
-                    stgTextView.setText(temp);
-                }
-
-                // CSB East to Gorecki/Sexton
-                etsTextView = findViewById(R.id.etsTextView);
-
-                for (String element : ets) {
-                    String temp = (String) etsTextView.getText();
-                    temp = (temp + "\n" + element);
-                    etsTextView.setText(temp);
-                }
-
-                //Gorecki to Alcuin
-                gtaTextView = findViewById(R.id.gtaTextView);
-
-                for (String element : gta) {
-                    String temp = (String) gtaTextView.getText();
-                    temp = (temp + "\n" + element);
-                    gtaTextView.setText(temp);
-                }
-
-                //Gorecki to Alcuin
-                atgTextView = findViewById(R.id.atgTextView);
-
-                for (String element : atg) {
-                    String temp = (String) atgTextView.getText();
-                    temp = (temp + "\n" + element);
-                    atgTextView.setText(temp);
-                }
-
-                // onClickListeners for cards...in future make card it's own class to prevent duplicates of all these methods
-
                 gtsCard = findViewById(R.id.gtsCard);
                 gtsCard.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         openCloseCard(v, gtsTextView, gtsCard);
@@ -477,32 +427,70 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                gtsTextView = findViewById(R.id.gtsTextView);
+                stgTextView = findViewById(R.id.stgTextView);
+                etsTextView = findViewById(R.id.etsTextView);
+                gtaTextView = findViewById(R.id.gtaTextView);
+                atgTextView = findViewById(R.id.atgTextView);
+
                 nextBusGtsTextView = findViewById(R.id.nextBusGtsTextView);
+                nextBusStgTextView = findViewById(R.id.nextBusStgTextView);
+                nextBusEtsTextView = findViewById(R.id.nextBusEtsTextView);
+                nextBusGtaTextView = findViewById(R.id.nextBusGtaTextView);
+                nextBusAtgTextView = findViewById(R.id.nextBusAtgTextView);
+
+
+                // Gorecki to Sexton
                 if (goreckiToSexton) {
+                    for (String element : gts) {
+                        String temp = (String) gtsTextView.getText();
+                        temp = (temp + "\n" + element);
+                        gtsTextView.setText(temp);
+                    }
                     nextBusGtsTextView.setText(calculateBusTime(gts));
                     revealAnimation(gtsCard);
                 }
 
-                nextBusStgTextView = findViewById(R.id.nextBusStgTextView);
+                // Sexton to Gorecki
                 if (sextonToGorecki) {
+                    for (String element : stg) {
+                        String temp = (String) stgTextView.getText();
+                        temp = (temp + "\n" + element);
+                        stgTextView.setText(temp);
+                    }
                     nextBusStgTextView.setText(calculateBusTime(stg));
                     revealAnimation(stgCard);
                 }
 
-                nextBusEtsTextView = findViewById(R.id.nextBusEtsTextView);
+                // CSB East to Gorecki/Sexton
                 if (eastToSexton) {
+                    for (String element : ets) {
+                        String temp = (String) etsTextView.getText();
+                        temp = (temp + "\n" + element);
+                        etsTextView.setText(temp);
+                    }
                     nextBusEtsTextView.setText(calculateBusTime(ets));
                     revealAnimation(etsCard);
                 }
 
-                nextBusGtaTextView = findViewById(R.id.nextBusGtaTextView);
+                //Gorecki to Alcuin
                 if (goreckiToAlcuin) {
+                    for (String element : gta) {
+                        String temp = (String) gtaTextView.getText();
+                        temp = (temp + "\n" + element);
+                        gtaTextView.setText(temp);
+                    }
                     nextBusGtaTextView.setText(calculateBusTime(gta));
                     revealAnimation(gtaCard);
                 }
 
-                nextBusAtgTextView = findViewById(R.id.nextBusAtgTextView);
+                //Alcuin to Gorecki
                 if (alcuinToGorecki) {
+                    for (String element : atg) {
+                        String temp = (String) atgTextView.getText();
+                        temp = (temp + "\n" + element);
+                        atgTextView.setText(temp);
+                    }
                     nextBusAtgTextView.setText(calculateBusTime(atg));
                     revealAnimation(atgCard);
                 }
@@ -547,13 +535,6 @@ public class MainActivity extends AppCompatActivity {
                 goreckiToAlcuin = false;
                 alcuinToGorecki = false;
 
-/*                // sets display variables to proper textView ID -- later use global variables to do this once
-                gtsDisplay = findViewById(R.id.textView14);
-                stgDisplay = findViewById(R.id.textView16);
-                etsTextView = findViewById(R.id.etsTextView);
-                gtaDisplay = findViewById(R.id.textView20);
-                atgDisplay = findViewById(R.id.textView22);*/
-
                 // sets TextView text blank
                 gtsTextView.setText("");
                 nextBusGtsTextView.setText("");
@@ -587,7 +568,6 @@ public class MainActivity extends AppCompatActivity {
     private void refreshContent() {
         resetGUI();
         backend();
-        System.out.println(scheduleURL);
 
         mSwipeRefreshLayout.setRefreshing(false);
     }
@@ -646,11 +626,21 @@ public class MainActivity extends AppCompatActivity {
                     .withMinuteOfHour(arrivalTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
                     .withSecondOfMinute(0);
 
+            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM"))) // if current time is pm and next bus arrives in am, nextBus advances by day to prevent negative time
+            {
+                nextBusArrival = nextBusArrival.plusDays(1);
+            }
+
             DateTime nextBusDeparture = new DateTime()
                     .withDayOfMonth(targetDate.getDayOfMonth())
                     .withHourOfDay(departureTimeHour)
                     .withMinuteOfHour(departureTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
                     .withSecondOfMinute(0);
+
+            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM"))) // if current time is pm and next bus arrives in am, nextBus advances by day to prevent negative time
+            {
+                nextBusDeparture = nextBusDeparture.plusDays(1);
+            }
 
             Duration duration = new Duration(now, nextBusArrival);
             Boolean hasArrived = false;
@@ -694,6 +684,11 @@ public class MainActivity extends AppCompatActivity {
                     .withHourOfDay(nextTimeHour)
                     .withMinuteOfHour(nextTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
                     .withSecondOfMinute(0);
+
+            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM"))) // if current time is pm and next bus arrives in am, nextBus advances by day to prevent negative time
+            {
+                nextBus = nextBus.plusDays(1);
+            }
 
             Duration duration = new Duration(now, nextBus);
 
