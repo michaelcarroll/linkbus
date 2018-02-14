@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private DateTime targetDate;
     private String scheduleURL;
 
+    private int datePosition;
 
     private Spinner spinner;
 
@@ -186,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
     private void daySelector(int position) {
         switch (position) {
             case 0:
+                datePosition = position;
                 scheduleURL = "https://apps.csbsju.edu/busschedule";
                 targetDate = DateTime.now(); // sets to today's date
                 if (gtsCard != null)
@@ -197,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
             case 4:
             case 5:
             case 6:
+                datePosition = position;
                 scheduleURL = "https://apps.csbsju.edu/busschedule/?date=" + daysBackend[position];
                 targetDate = DateTime.now(); // sets to today's date
                 targetDate = targetDate.plusDays(position);
@@ -626,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
                     .withMinuteOfHour(arrivalTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
                     .withSecondOfMinute(0);
 
-            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM"))) // if current time is pm and next bus arrives in am, nextBus advances by day to prevent negative time
+            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
             {
                 nextBusArrival = nextBusArrival.plusDays(1);
             }
@@ -637,7 +640,7 @@ public class MainActivity extends AppCompatActivity {
                     .withMinuteOfHour(departureTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
                     .withSecondOfMinute(0);
 
-            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM"))) // if current time is pm and next bus arrives in am, nextBus advances by day to prevent negative time
+            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
             {
                 nextBusDeparture = nextBusDeparture.plusDays(1);
             }
@@ -685,7 +688,7 @@ public class MainActivity extends AppCompatActivity {
                     .withMinuteOfHour(nextTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
                     .withSecondOfMinute(0);
 
-            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM"))) // if current time is pm and next bus arrives in am, nextBus advances by day to prevent negative time
+            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
             {
                 nextBus = nextBus.plusDays(1);
             }
