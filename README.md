@@ -14,7 +14,7 @@ Linkbus is currently available for Android in the [Google Play Store](https://pl
 * **Clean interface:** Expandable cards for each bus route (CardView), follows Material UI guidelines 
 * **Date advancement:** Ability to view schedule for a future date, up to a week in advance
 * **[JodaTime library](https://github.com/dlew/joda-time-android):** While Java has [built-in time handeling](https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html), prior to Java 8 it has critical bugs and is difficult to use. JodaTime provides a solution for applications that need date/time management with many [benefits](http://www.joda.org/joda-time/#Why_Joda-Time). 
-* **Remote messaging system:** Ability for developer to display an Android SnackBar message on initial launch with useful information (for example, a special class schedule for the day -- see 2nd screenshot)
+* **Remote messaging system:** Ability for developer to remotely set an Android SnackBar message to display on initial launch (for example, a special class schedule for the day — see screenshots)
 
 ## Screenshots
 
