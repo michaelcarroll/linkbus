@@ -1,8 +1,8 @@
 ## Linkbus
 
-Linkbus is an Android application that provides an always-accurate view of the "Link" bus schedule for the [College of Saint Benedict / Saint John's University](csbsju.edu) campuses. 
+Linkbus is an Android application that provides an always-accurate view of the "Link" bus schedule for the [College of Saint Benedict / Saint John's University](https://csbsju.edu/) campuses. 
 
-App offerings for the school's bus schedule were weak and hadn't been updated for approximately 3 years, so I decided build my own. The app pulls data from [csbsju.edu/bus](csbsju.edu/bus) to provide the most accurate and up-to-date schedule, so any changes to the schedule are immediately reflected in the app.
+App offerings for the school's bus schedule were weak and hadn't been updated for approximately 3 years, so I decided build my own. The app pulls data from [csbsju.edu/bus](https://csbsju.edu/bus) to provide the most accurate and up-to-date schedule, so any changes to the schedule are immediately reflected in the app.
 
 ## Installation
 
