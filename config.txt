@@ -2,7 +2,7 @@
 
 
 snackbar=enabled
-snackbarOutput=Alert: Alternate schedule due to weather
+snackbarOutput=Alert: Busses running on the hour due to inclement weather
 
 snackbarAction=enabled
 snackbarURL=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2
