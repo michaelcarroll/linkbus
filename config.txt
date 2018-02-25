@@ -1,12 +1,12 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disabled
-snackbarOutput=
+snackbar=enabled
+snackbarOutput=Alert: Busses running on the hour due to inclement weather
 
-snackbarAction=disabled
-snackbarURL=
-snackbarActionText=
+snackbarAction=enabled
+snackbarURL=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2
+snackbarActionText=VIEW
 
 end
 
