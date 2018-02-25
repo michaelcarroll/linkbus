@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String scheduleURL;
 
     private int datePosition;
-    private boolean networkFinished = false;
+    private boolean networkSuccess = false;
 
     private Spinner spinner;
 
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 datePosition = position;
                 scheduleURL = "https://apps.csbsju.edu/busschedule";
                 targetDate = DateTime.now(); // sets to today's date
-                if (networkFinished)
+                if (networkSuccess)
                     refreshContent();
                 break;
             case 1:
@@ -372,8 +372,6 @@ public class MainActivity extends AppCompatActivity {
 
                 // reads HTML of URL line by line
                 while ((str = in.readLine()) != null) {
-                    System.out.println(str);
-
                     if (str.contains("snackbar=")) {
                         str = str.split("=")[1]; // sets str to text after colon
                         if (str.contains("enabled")) {
@@ -410,12 +408,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
+                networkSuccess = true;
+
             } catch (MalformedURLException e) {
             } catch (IOException e) {
-                Snackbar.make(coordinatorLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();
+                networkSuccess = false;
             }
-            networkFinished = true;
-            return networkFinished;
+            return networkSuccess;
         }
 
         protected void onProgressUpdate(Integer... progress) {
@@ -538,6 +537,7 @@ public class MainActivity extends AppCompatActivity {
                                 .show();
                     }
             }
+            else{Snackbar.make(coordinatorLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();}
         }
     }
 
@@ -618,126 +618,130 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String calculateBusTime(ArrayList<String> route) {
-        String nextTime = route.get(0);
+        if (route.get(0) != null) {
 
-        if (nextTime.contains("-")) { // if next bus time is a range of times
-            String arrivalTime = nextTime.split("-")[0]; // "*7:30 "
-            String departureTime = nextTime.split("-")[1]; // " 7:40 AM"
+            String nextTime = route.get(0);
 
-            // arrival time
-            int arrivalTimeHour = Integer.parseInt((arrivalTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
-            // convert to 24-hour time
-            if ((nextTime.contains("PM")) && (arrivalTimeHour != 12)) // if nextTime is after 12:59PM, add 12 to convert to 24hr time
-                arrivalTimeHour += 12;
-            if ((nextTime.contains("AM")) && (arrivalTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
-                arrivalTimeHour -= 12;
+            if (nextTime.contains("-")) { // if next bus time is a range of times
+                String arrivalTime = nextTime.split("-")[0]; // "*7:30 "
+                String departureTime = nextTime.split("-")[1]; // " 7:40 AM"
 
-            int arrivalTimeMinute = Integer.parseInt((arrivalTime.split(":")[1].replaceAll("\\D+", ""))); // minute (30)
+                // arrival time
+                int arrivalTimeHour = Integer.parseInt((arrivalTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
+                // convert to 24-hour time
+                if ((nextTime.contains("PM")) && (arrivalTimeHour != 12)) // if nextTime is after 12:59PM, add 12 to convert to 24hr time
+                    arrivalTimeHour += 12;
+                if ((nextTime.contains("AM")) && (arrivalTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
+                    arrivalTimeHour -= 12;
 
-            // departure time
-            int departureTimeHour = Integer.parseInt((departureTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
-            // convert to 24-hour time
-            if ((nextTime.contains("PM")) && (departureTimeHour != 12)) // if nextTime is after 12:59PM, add 12 to convert to 24hr time
-                departureTimeHour += 12;
-            if ((nextTime.contains("AM")) && (departureTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
-                departureTimeHour -= 12;
+                int arrivalTimeMinute = Integer.parseInt((arrivalTime.split(":")[1].replaceAll("\\D+", ""))); // minute (30)
 
-            int departureTimeMinute = Integer.parseInt((departureTime.split(":")[1].replaceAll("\\D+", ""))); // minute (40)
+                // departure time
+                int departureTimeHour = Integer.parseInt((departureTime.split(":")[0].replaceAll("\\D+", ""))); // hour (7)
+                // convert to 24-hour time
+                if ((nextTime.contains("PM")) && (departureTimeHour != 12)) // if nextTime is after 12:59PM, add 12 to convert to 24hr time
+                    departureTimeHour += 12;
+                if ((nextTime.contains("AM")) && (departureTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
+                    departureTimeHour -= 12;
 
-            DateTime now = DateTime.now();
+                int departureTimeMinute = Integer.parseInt((departureTime.split(":")[1].replaceAll("\\D+", ""))); // minute (40)
 
-            DateTime nextBusArrival = new DateTime()
-                    .withYearOfEra(targetDate.getYearOfEra())
-                    .withMonthOfYear(targetDate.getMonthOfYear())
-                    .withDayOfMonth(targetDate.getDayOfMonth())
-                    .withHourOfDay(arrivalTimeHour)
-                    .withMinuteOfHour(arrivalTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
-                    .withSecondOfMinute(0);
+                DateTime now = DateTime.now();
 
-            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
-            {
-                nextBusArrival = nextBusArrival.plusDays(1);
+                DateTime nextBusArrival = new DateTime()
+                        .withYearOfEra(targetDate.getYearOfEra())
+                        .withMonthOfYear(targetDate.getMonthOfYear())
+                        .withDayOfMonth(targetDate.getDayOfMonth())
+                        .withHourOfDay(arrivalTimeHour)
+                        .withMinuteOfHour(arrivalTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
+                        .withSecondOfMinute(0);
+
+                if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
+                {
+                    nextBusArrival = nextBusArrival.plusDays(1);
+                }
+
+                DateTime nextBusDeparture = new DateTime()
+                        .withYearOfEra(targetDate.getYearOfEra())
+                        .withMonthOfYear(targetDate.getMonthOfYear())
+                        .withDayOfMonth(targetDate.getDayOfMonth())
+                        .withHourOfDay(departureTimeHour)
+                        .withMinuteOfHour(departureTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
+                        .withSecondOfMinute(0);
+
+                if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
+                {
+                    nextBusDeparture = nextBusDeparture.plusDays(1);
+                }
+
+                Duration duration = new Duration(now, nextBusArrival);
+                Boolean hasArrived = false;
+
+                System.out.println("duration - min :" + duration.getStandardMinutes());
+
+                if (duration.getStandardMinutes() <= 0) {
+                    hasArrived = true;
+                    duration = new Duration(now, nextBusDeparture);
+                }
+
+                PeriodFormatter formatter = new PeriodFormatterBuilder() // formats time correctly for display
+                        .appendWeeks().appendSuffix(" weeks ")
+                        .appendDays().appendSuffix(" days ")
+                        .appendHours().appendSuffix(" hr ")
+                        .appendMinutes().appendSuffix(" min. ")
+                        .printZeroNever()
+                        .toFormatter();
+
+                String formattedDuration = formatter.print(duration.toPeriodFrom(now));
+
+                if (formattedDuration.length() > 0 && !hasArrived)
+                    return ("Next bus arrives in " + formattedDuration);
+                else if (formattedDuration.length() > 0 && hasArrived)
+                    return ("Busses running. Last bus departs in " + formattedDuration);
+            } else { // next bus time is singular
+
+                int nextTimeHour = Integer.parseInt((nextTime.split(":")[0])); // hour
+                // convert to 24-hour time
+                if ((nextTime.contains("PM")) && (nextTimeHour != 12))
+                    nextTimeHour += 12;
+                if ((nextTime.contains("AM")) && (nextTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
+                    nextTimeHour -= 12;
+
+                int nextTimeMinute = Integer.parseInt((nextTime.split(":")[1].replaceAll("\\D+", ""))); // minute
+
+                DateTime now = DateTime.now();
+
+                DateTime nextBus = new DateTime()
+                        .withYearOfEra(targetDate.getYearOfEra())
+                        .withMonthOfYear(targetDate.getMonthOfYear())
+                        .withDayOfMonth(targetDate.getDayOfMonth())
+                        .withHourOfDay(nextTimeHour)
+                        .withMinuteOfHour(nextTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
+                        .withSecondOfMinute(0);
+
+                if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
+                {
+                    nextBus = nextBus.plusDays(1);
+                }
+
+                Duration duration = new Duration(now, nextBus);
+
+                PeriodFormatter formatter = new PeriodFormatterBuilder() // formats time correctly for display
+                        .appendWeeks().appendSuffix(" weeks ")
+                        .appendDays().appendSuffix(" days ")
+                        .appendHours().appendSuffix(" hr ")
+                        .appendMinutes().appendSuffix(" min. ")
+                        .printZeroNever()
+                        .toFormatter();
+
+                String formattedDuration = formatter.print(duration.toPeriodFrom(now));
+
+                if (formattedDuration.length() > 0)
+                    return ("Next bus arrives in " + formattedDuration);
+                else
+                    return ("Bus arriving now");
             }
-
-            DateTime nextBusDeparture = new DateTime()
-                    .withYearOfEra(targetDate.getYearOfEra())
-                    .withMonthOfYear(targetDate.getMonthOfYear())
-                    .withDayOfMonth(targetDate.getDayOfMonth())
-                    .withHourOfDay(departureTimeHour)
-                    .withMinuteOfHour(departureTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
-                    .withSecondOfMinute(0);
-
-            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
-            {
-                nextBusDeparture = nextBusDeparture.plusDays(1);
-            }
-
-            Duration duration = new Duration(now, nextBusArrival);
-            Boolean hasArrived = false;
-
-            System.out.println("duration - min :" + duration.getStandardMinutes());
-
-            if (duration.getStandardMinutes() <= 0) {
-                hasArrived = true;
-                duration = new Duration(now, nextBusDeparture);
-            }
-
-            PeriodFormatter formatter = new PeriodFormatterBuilder() // formats time correctly for display
-                    .appendWeeks().appendSuffix(" weeks ")
-                    .appendDays().appendSuffix(" days ")
-                    .appendHours().appendSuffix(" hr ")
-                    .appendMinutes().appendSuffix(" min. ")
-                    .printZeroNever()
-                    .toFormatter();
-
-            String formattedDuration = formatter.print(duration.toPeriodFrom(now));
-
-            if (formattedDuration.length() > 0 && !hasArrived)
-                return ("Next bus arrives in " + formattedDuration);
-            else if (formattedDuration.length() > 0 && hasArrived)
-                return ("Busses running. Last bus departs in " + formattedDuration);
-        } else { // next bus time is singular
-
-            int nextTimeHour = Integer.parseInt((nextTime.split(":")[0])); // hour
-            // convert to 24-hour time
-            if ((nextTime.contains("PM")) && (nextTimeHour != 12))
-                nextTimeHour += 12;
-            if ((nextTime.contains("AM")) && (nextTimeHour == 12)) // if nextTime is between 12AM - 12:59AM, remove 12 to convert to 24hr time
-                nextTimeHour -= 12;
-
-            int nextTimeMinute = Integer.parseInt((nextTime.split(":")[1].replaceAll("\\D+", ""))); // minute
-
-            DateTime now = DateTime.now();
-
-            DateTime nextBus = new DateTime()
-                    .withYearOfEra(targetDate.getYearOfEra())
-                    .withMonthOfYear(targetDate.getMonthOfYear())
-                    .withDayOfMonth(targetDate.getDayOfMonth())
-                    .withHourOfDay(nextTimeHour)
-                    .withMinuteOfHour(nextTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
-                    .withSecondOfMinute(0);
-
-            if ((now.hourOfDay().get() >= 12) && (nextTime.contains("AM")) && (datePosition == 0)) // if current time is pm, next bus arrives in am, and viewing today: nextBus advances by day to prevent negative time
-            {
-                nextBus = nextBus.plusDays(1);
-            }
-
-            Duration duration = new Duration(now, nextBus);
-
-            PeriodFormatter formatter = new PeriodFormatterBuilder() // formats time correctly for display
-                    .appendWeeks().appendSuffix(" weeks ")
-                    .appendDays().appendSuffix(" days ")
-                    .appendHours().appendSuffix(" hr ")
-                    .appendMinutes().appendSuffix(" min. ")
-                    .printZeroNever()
-                    .toFormatter();
-
-            String formattedDuration = formatter.print(duration.toPeriodFrom(now));
-
-            if (formattedDuration.length() > 0)
-                return ("Next bus arrives in " + formattedDuration);
-            else
-                return ("Bus arriving now");
+            return null;
         }
         return null;
     }
