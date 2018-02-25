@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     private String scheduleURL;
 
     private int datePosition;
+    private boolean networkFinished = false;
 
     private Spinner spinner;
 
@@ -95,6 +96,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean snackbarActionToggle;
     private String snackbarURL;
     private String snackbarActionText;
+
+    private int snackBarDuration;
 
     // _____________________________________________________________________________________________
 
@@ -216,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 datePosition = position;
                 scheduleURL = "https://apps.csbsju.edu/busschedule";
                 targetDate = DateTime.now(); // sets to today's date
-                if (gtsCard != null)
+                if (networkFinished)
                     refreshContent();
                 break;
             case 1:
@@ -228,7 +231,9 @@ public class MainActivity extends AppCompatActivity {
                 datePosition = position;
                 scheduleURL = "https://apps.csbsju.edu/busschedule/?date=" + daysBackend[position];
                 targetDate = DateTime.now(); // sets to today's date
+                System.out.println(targetDate.toString());
                 targetDate = targetDate.plusDays(position);
+                System.out.println(targetDate.toString());
                 refreshContent();
                 break;
         }
@@ -367,6 +372,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // reads HTML of URL line by line
                 while ((str = in.readLine()) != null) {
+                    System.out.println(str);
 
                     if (str.contains("snackbar=")) {
                         str = str.split("=")[1]; // sets str to text after colon
@@ -389,6 +395,17 @@ public class MainActivity extends AppCompatActivity {
                             snackbarActionToggle = false;
                     }
 
+                    if (str.contains("snackBarDuration=")) {
+                        str = str.split("=")[1];
+                        if (str.contains("LENGTH_INDEFINITE"))
+                            snackBarDuration = Snackbar.LENGTH_INDEFINITE;
+                        else if (str.contains("LENGTH_SHORT"))
+                            snackBarDuration = Snackbar.LENGTH_SHORT;
+                        else
+                            snackBarDuration = Snackbar.LENGTH_LONG;
+
+                    }
+
                     if (str.contains("end")) // reached end of configuration steps
                         break;
                 }
@@ -397,7 +414,8 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 Snackbar.make(coordinatorLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();
             }
-            return true;
+            networkFinished = true;
+            return networkFinished;
         }
 
         protected void onProgressUpdate(Integer... progress) {
@@ -507,9 +525,9 @@ public class MainActivity extends AppCompatActivity {
 
                 if (snackbarToggle)
                     if (!snackbarActionToggle)
-                        Snackbar.make(coordinatorLayout, snackbarOutput, Snackbar.LENGTH_LONG).show();
+                        Snackbar.make(coordinatorLayout, snackbarOutput, snackBarDuration).show();
                     else {
-                        Snackbar.make(coordinatorLayout, snackbarOutput, Snackbar.LENGTH_LONG)
+                        Snackbar.make(coordinatorLayout, snackbarOutput, snackBarDuration)
                                 .setAction(snackbarActionText, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -629,6 +647,8 @@ public class MainActivity extends AppCompatActivity {
             DateTime now = DateTime.now();
 
             DateTime nextBusArrival = new DateTime()
+                    .withYearOfEra(targetDate.getYearOfEra())
+                    .withMonthOfYear(targetDate.getMonthOfYear())
                     .withDayOfMonth(targetDate.getDayOfMonth())
                     .withHourOfDay(arrivalTimeHour)
                     .withMinuteOfHour(arrivalTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
@@ -640,6 +660,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             DateTime nextBusDeparture = new DateTime()
+                    .withYearOfEra(targetDate.getYearOfEra())
+                    .withMonthOfYear(targetDate.getMonthOfYear())
                     .withDayOfMonth(targetDate.getDayOfMonth())
                     .withHourOfDay(departureTimeHour)
                     .withMinuteOfHour(departureTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
@@ -688,6 +710,8 @@ public class MainActivity extends AppCompatActivity {
             DateTime now = DateTime.now();
 
             DateTime nextBus = new DateTime()
+                    .withYearOfEra(targetDate.getYearOfEra())
+                    .withMonthOfYear(targetDate.getMonthOfYear())
                     .withDayOfMonth(targetDate.getDayOfMonth())
                     .withHourOfDay(nextTimeHour)
                     .withMinuteOfHour(nextTimeMinute + 1) // adds one minute to next bus time to fix rounding issue during subtraction
