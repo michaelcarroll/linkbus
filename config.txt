@@ -5,7 +5,7 @@ snackbar=enabled
 snackbarOutput=Alert: Busses running on the hour due to inclement weather
 
 snackbarAction=enabled
-snackbarURL=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2
+snackbarURL=https://photos.google.com/share/AF1QipMgIcbosbAtKdqzV0bNMInpOlgfSYPb42nmcH9VQejrshFSV5g-jexuNDbMNMIPrg?key=RTR6ZXdzTzdLVWdDTk50dkc5OTM0bVByTGwtWW5R
 snackbarActionText=VIEW
 
 snackBarDuration=LENGTH_INDEFINITE
