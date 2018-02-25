@@ -2,6 +2,7 @@ package com.carroll.michael.linkbus;
 
 import android.animation.Animator;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -52,16 +53,19 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> ets;
     private ArrayList<String> gta;
     private ArrayList<String> atg;
+
     private TextView gtsTextView;
     private TextView stgTextView;
     private TextView etsTextView;
     private TextView gtaTextView;
     private TextView atgTextView;
+
     private TextView nextBusGtsTextView;
     private TextView nextBusStgTextView;
     private TextView nextBusEtsTextView;
     private TextView nextBusGtaTextView;
     private TextView nextBusAtgTextView;
+
     private CardView gtsCard;
     private CardView gtaCard;
     private CardView etsCard;
@@ -132,13 +136,35 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //calls refreshContent method
                 refreshContent();
             }
         });
 
         // calls main backend method to compute and display initial listings
-        backend();
+
+        gtsTextView = findViewById(R.id.gtsTextView);
+        stgTextView = findViewById(R.id.stgTextView);
+        etsTextView = findViewById(R.id.etsTextView);
+        gtaTextView = findViewById(R.id.gtaTextView);
+        atgTextView = findViewById(R.id.atgTextView);
+
+        nextBusGtsTextView = findViewById(R.id.nextBusGtsTextView);
+        nextBusStgTextView = findViewById(R.id.nextBusStgTextView);
+        nextBusEtsTextView = findViewById(R.id.nextBusEtsTextView);
+        nextBusGtaTextView = findViewById(R.id.nextBusGtaTextView);
+        nextBusAtgTextView = findViewById(R.id.nextBusAtgTextView);
+
+        gtsCard = findViewById(R.id.gtsCard);
+        gtaCard = findViewById(R.id.gtaCard);
+        etsCard = findViewById(R.id.etsCard);
+        stgCard = findViewById(R.id.stgCard);
+        atgCard = findViewById(R.id.atgCard);
+
+        try {
+            URL url = new URL(scheduleURL);
+            new BackendAsyncTask().execute(url);
+        } catch (MalformedURLException e) {
+        }
     }
 
     @Override
@@ -208,185 +234,178 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void backend() {
-        // Network operations done on separate thread to prevent UI unresponsiveness
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(scheduleURL);
+    public class BackendAsyncTask extends AsyncTask<URL, Integer, Boolean> {
+        protected Boolean doInBackground(URL... urls) {
+            URL url = urls[0];
+            try {
+                //Reads all text returned by server
+                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                String str;
+                // Initializes ArrayList objects for each bus schedule
+                gts = new ArrayList<String>(); // Gorecki to Sexton
+                stg = new ArrayList<String>(); // Sexton to Gorecki
+                ets = new ArrayList<String>(); // CSB East to Gorecki/Sexton
+                gta = new ArrayList<String>(); // Gorecki to Alcuin
+                atg = new ArrayList<String>(); // Alcuin to Gorecki
 
-                    //Reads all text returned by server
-                    BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-                    String str;
-                    // Initializes ArrayList objects for each bus schedule
-                    gts = new ArrayList<String>(); // Gorecki to Sexton
-                    stg = new ArrayList<String>(); // Sexton to Gorecki
-                    ets = new ArrayList<String>(); // CSB East to Gorecki/Sexton
-                    gta = new ArrayList<String>(); // Gorecki to Alcuin
-                    atg = new ArrayList<String>(); // Alcuin to Gorecki
-
-                    // reads HTML of URL line by line
-                    while ((str = in.readLine()) != null) {
-                        // checks if a line of HTML contains "Gorecki to Sexton"
-                        if (str.contains("Gorecki to Sexton")) {
-                            System.out.println(str);
-                            goreckiToSexton = true;
-                        }
-
-                        // Gets bus times for Gorecki to Sexton and adds them to gts ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToSexton) && (!sextonToGorecki)) {
-                            String time = str;
-                            // uses regex to delete non-numeric characters, except for ":"
-                            time = time.replaceAll("[^\\d:*-]", "");
-                            // adds PM or AM to bus time
-                            if (str.contains("PM")) {
-                                time = time + " PM";
-                            } else {
-                                time = time + " AM";
-                            }
-                            gts.add(time);
-                        }
-
-                        if (str.contains("Sexton to Gorecki")) {
-                            System.out.println(str);
-                            sextonToGorecki = true;
-                        }
-
-                        // Gets bus times for Sexton to Gorecki and adds them to stg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (sextonToGorecki) && (!eastToSexton)) {
-                            String time = str;
-                            // uses regex to delete non-numeric characters, except for ":"
-                            time = time.replaceAll("[^\\d:*-]", "");
-                            // adds PM or AM to bus time
-                            if (str.contains("PM")) {
-                                time = time + " PM";
-                            } else {
-                                time = time + " AM";
-                            }
-                            stg.add(time);
-                        }
-
-                        if (str.contains("CSB East to Gorecki/Sexton")) {
-                            System.out.println(str);
-                            eastToSexton = true;
-                        }
-
-                        // Gets bus times for CSB East to Gorecki/Sexton and adds them to stg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (eastToSexton) && (!goreckiToAlcuin) && (!alcuinToGorecki)) {
-                            String time = str;
-                            // uses regex to delete non-numeric characters, except for ":"
-                            time = time.replaceAll("[^\\d:*-]", "");
-                            // adds PM or AM to bus time
-                            if (str.contains("PM")) {
-                                time = time + " PM";
-                            } else {
-                                time = time + " AM";
-                            }
-                            ets.add(time);
-                        }
-
-                        if (str.contains("Gorecki to Alcuin")) {
-                            System.out.println(str);
-                            goreckiToAlcuin = true;
-                        }
-
-                        // Gets bus times for Gorecki to Alcuin and adds them to gta ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToAlcuin) && (!alcuinToGorecki)) {
-                            String time = str;
-                            // uses regex to delete non-numeric characters, except for ":"
-                            time = time.replaceAll("[^\\d:*-]", "");
-                            // adds PM or AM to bus time
-                            if (str.contains("PM")) {
-                                time = time + " PM";
-                            } else {
-                                time = time + " AM";
-                            }
-                            gta.add(time);
-                        }
-
-                        if (str.contains("Alcuin to Gorecki")) {
-                            System.out.println(str);
-                            alcuinToGorecki = true;
-                        }
-
-                        // Gets bus times for Alcuin to Gorecki and adds them to atg ArrayList
-                        if ((str.contains("PM") || (str.contains("AM"))) && (alcuinToGorecki)) {
-                            String time = str;
-                            // uses regex to delete non-numeric characters, except for ":"
-                            time = time.replaceAll("[^\\d:*-]", "");
-                            // adds PM or AM to bus time
-                            if (str.contains("PM")) {
-                                time = time + " PM";
-                            } else {
-                                time = time + " AM";
-                            }
-                            atg.add(time);
-                        }
-
-                        if (str.contains("Crossroads"))
-                            break;
+                // reads HTML of URL line by line
+                while ((str = in.readLine()) != null) {
+                    // checks if a line of HTML contains "Gorecki to Sexton"
+                    if (str.contains("Gorecki to Sexton")) {
+                        System.out.println(str);
+                        goreckiToSexton = true;
                     }
 
-
-                    in.close();
-                    System.out.println("Gorecki to Sexton " + gts); // temporary readout of gts array
-                    System.out.println("Sexton to Gorecki " + stg); // temporary readout of stg array
-                    System.out.println("CSB East to Gorecki/Sexton " + ets); // temporary readout of ets array
-                    System.out.println("Gorecki to Alcuin " + gta); // temporary readout of gta array
-                    System.out.println("Alcuin to Gorecki " + atg); // temporary readout of atg array
-
-                    url = new URL(remoteMessageURL);
-
-                    //Reads all text returned by server
-                    in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-                    //snackBar:
-
-                    // reads HTML of URL line by line
-                    while ((str = in.readLine()) != null) {
-
-                        if (str.contains("snackbar=")) {
-                            str = str.split("=")[1]; // sets str to text after colon
-                            if (str.contains("enabled")) {
-                                snackbarToggle = true;
-                                snackbarOutput = in.readLine().split("=")[1]; // reads text after "snackbarOutput:" in next line of file
-                            } else {
-                                snackbarToggle = false;
-                                break;
-                            }
+                    // Gets bus times for Gorecki to Sexton and adds them to gts ArrayList
+                    if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToSexton) && (!sextonToGorecki)) {
+                        String time = str;
+                        // uses regex to delete non-numeric characters, except for ":"
+                        time = time.replaceAll("[^\\d:*-]", "");
+                        // adds PM or AM to bus time
+                        if (str.contains("PM")) {
+                            time = time + " PM";
+                        } else {
+                            time = time + " AM";
                         }
-
-                        if (str.contains("snackbarAction=")) {
-                            str = str.split("=")[1];
-                            if (str.contains("enabled")) {
-                                snackbarActionToggle = true;
-                                snackbarURL = in.readLine().split("=")[1];
-                                snackbarActionText = in.readLine().split("=")[1];
-                            } else
-                                snackbarActionToggle = false;
-                        }
-
-                        if (str.contains("end")) // reached end of configuration steps
-                            break;
+                        gts.add(time);
                     }
 
-                    generateUI();
+                    if (str.contains("Sexton to Gorecki")) {
+                        System.out.println(str);
+                        sextonToGorecki = true;
+                    }
 
-                } catch (MalformedURLException e) {
-                } catch (IOException e) {
-                    Snackbar.make(coordinatorLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();
+                    // Gets bus times for Sexton to Gorecki and adds them to stg ArrayList
+                    if ((str.contains("PM") || (str.contains("AM"))) && (sextonToGorecki) && (!eastToSexton)) {
+                        String time = str;
+                        // uses regex to delete non-numeric characters, except for ":"
+                        time = time.replaceAll("[^\\d:*-]", "");
+                        // adds PM or AM to bus time
+                        if (str.contains("PM")) {
+                            time = time + " PM";
+                        } else {
+                            time = time + " AM";
+                        }
+                        stg.add(time);
+                    }
+
+                    if (str.contains("CSB East to Gorecki/Sexton")) {
+                        System.out.println(str);
+                        eastToSexton = true;
+                    }
+
+                    // Gets bus times for CSB East to Gorecki/Sexton and adds them to stg ArrayList
+                    if ((str.contains("PM") || (str.contains("AM"))) && (eastToSexton) && (!goreckiToAlcuin) && (!alcuinToGorecki)) {
+                        String time = str;
+                        // uses regex to delete non-numeric characters, except for ":"
+                        time = time.replaceAll("[^\\d:*-]", "");
+                        // adds PM or AM to bus time
+                        if (str.contains("PM")) {
+                            time = time + " PM";
+                        } else {
+                            time = time + " AM";
+                        }
+                        ets.add(time);
+                    }
+
+                    if (str.contains("Gorecki to Alcuin")) {
+                        System.out.println(str);
+                        goreckiToAlcuin = true;
+                    }
+
+                    // Gets bus times for Gorecki to Alcuin and adds them to gta ArrayList
+                    if ((str.contains("PM") || (str.contains("AM"))) && (goreckiToAlcuin) && (!alcuinToGorecki)) {
+                        String time = str;
+                        // uses regex to delete non-numeric characters, except for ":"
+                        time = time.replaceAll("[^\\d:*-]", "");
+                        // adds PM or AM to bus time
+                        if (str.contains("PM")) {
+                            time = time + " PM";
+                        } else {
+                            time = time + " AM";
+                        }
+                        gta.add(time);
+                    }
+
+                    if (str.contains("Alcuin to Gorecki")) {
+                        System.out.println(str);
+                        alcuinToGorecki = true;
+                    }
+
+                    // Gets bus times for Alcuin to Gorecki and adds them to atg ArrayList
+                    if ((str.contains("PM") || (str.contains("AM"))) && (alcuinToGorecki)) {
+                        String time = str;
+                        // uses regex to delete non-numeric characters, except for ":"
+                        time = time.replaceAll("[^\\d:*-]", "");
+                        // adds PM or AM to bus time
+                        if (str.contains("PM")) {
+                            time = time + " PM";
+                        } else {
+                            time = time + " AM";
+                        }
+                        atg.add(time);
+                    }
+
+                    if (str.contains("Crossroads"))
+                        break;
                 }
-            }
-        }).start();
-    }
 
-    private void generateUI() {
-        // Runs UI updating on main thread
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                gtsCard = findViewById(R.id.gtsCard);
+
+                in.close();
+                System.out.println("Gorecki to Sexton " + gts); // temporary readout of gts array
+                System.out.println("Sexton to Gorecki " + stg); // temporary readout of stg array
+                System.out.println("CSB East to Gorecki/Sexton " + ets); // temporary readout of ets array
+                System.out.println("Gorecki to Alcuin " + gta); // temporary readout of gta array
+                System.out.println("Alcuin to Gorecki " + atg); // temporary readout of atg array
+
+                url = new URL(remoteMessageURL);
+
+                //Reads all text returned by server
+                in = new BufferedReader(new InputStreamReader(url.openStream()));
+
+                //snackBar:
+
+                // reads HTML of URL line by line
+                while ((str = in.readLine()) != null) {
+
+                    if (str.contains("snackbar=")) {
+                        str = str.split("=")[1]; // sets str to text after colon
+                        if (str.contains("enabled")) {
+                            snackbarToggle = true;
+                            snackbarOutput = in.readLine().split("=")[1]; // reads text after "snackbarOutput:" in next line of file
+                        } else {
+                            snackbarToggle = false;
+                            break;
+                        }
+                    }
+
+                    if (str.contains("snackbarAction=")) {
+                        str = str.split("=")[1];
+                        if (str.contains("enabled")) {
+                            snackbarActionToggle = true;
+                            snackbarURL = in.readLine().split("=")[1];
+                            snackbarActionText = in.readLine().split("=")[1];
+                        } else
+                            snackbarActionToggle = false;
+                    }
+
+                    if (str.contains("end")) // reached end of configuration steps
+                        break;
+                }
+
+            } catch (MalformedURLException e) {
+            } catch (IOException e) {
+                Snackbar.make(coordinatorLayout, "Network error: Cannot connect to CSB/SJU servers", Snackbar.LENGTH_LONG).show();
+            }
+            return true;
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+            System.out.println(progress[0]);
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result) {
                 gtsCard.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -394,7 +413,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                stgCard = findViewById(R.id.stgCard);
                 stgCard.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -403,7 +421,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                etsCard = findViewById(R.id.etsCard);
                 etsCard.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -412,7 +429,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                gtaCard = findViewById(R.id.gtaCard);
                 gtaCard.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -421,7 +437,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                atgCard = findViewById(R.id.atgCard);
                 atgCard.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -429,19 +444,6 @@ public class MainActivity extends AppCompatActivity {
                         openCloseCard(v, atgTextView, atgCard);
                     }
                 });
-
-                gtsTextView = findViewById(R.id.gtsTextView);
-                stgTextView = findViewById(R.id.stgTextView);
-                etsTextView = findViewById(R.id.etsTextView);
-                gtaTextView = findViewById(R.id.gtaTextView);
-                atgTextView = findViewById(R.id.atgTextView);
-
-                nextBusGtsTextView = findViewById(R.id.nextBusGtsTextView);
-                nextBusStgTextView = findViewById(R.id.nextBusStgTextView);
-                nextBusEtsTextView = findViewById(R.id.nextBusEtsTextView);
-                nextBusGtaTextView = findViewById(R.id.nextBusGtaTextView);
-                nextBusAtgTextView = findViewById(R.id.nextBusAtgTextView);
-
 
                 // Gorecki to Sexton
                 if (goreckiToSexton) {
@@ -518,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
                                 .show();
                     }
             }
-        });
+        }
     }
 
     private void resetGUI() {
@@ -570,8 +572,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshContent() {
         resetGUI();
-        backend();
-
+        try {
+            URL url = new URL(scheduleURL);
+            new BackendAsyncTask().execute(url);
+        } catch (MalformedURLException e) {
+        }
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
