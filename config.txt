@@ -5,7 +5,7 @@ snackbar=enabled
 snackbarOutput=Alert: Alternate schedule due to weather
 
 snackbarAction=enabled
-snackbarURL=https://www.google.com/url?q=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2&sa=D&source=hangouts&ust=1519602578767000&usg=AFQjCNGJpdoGxqSZiHAU2JG507WFfcypkw
+snackbarURL=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2
 snackbarActionText=VIEW
 
 end
