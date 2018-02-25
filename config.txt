@@ -8,6 +8,8 @@ snackbarAction=enabled
 snackbarURL=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2
 snackbarActionText=VIEW
 
+snackBarDuration=LENGTH_INDEFINITE
+
 end
 
 
@@ -19,6 +21,8 @@ snackbarOutput - *required if enabled*
 snackbarAction - enabled or disabled
 snackbarURL - *required if enabled*
 snackbarActionText - text of button
+
+snackBarDuration - LENGTH_LONG, LENGTH_SHORT, or LENGTH_INDEFINITE
 
 end - program stops here when reading text file to prevent wasting time
 ________
