@@ -1,14 +1,14 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disabled
-snackbarOutput=
+snackbar=enabled
+snackbarOutput=Bus schedule for Spring Break
 
-snackbarAction=disabled
-snackbarURL=
-snackbarActionText=
+snackbarAction=enabled
+snackbarURL=https://apps.csbsju.edu/busschedule/springbreak
+snackbarActionText=VIEW
 
-snackBarDuration=
+snackBarDuration=LENGTH_LONG
 
 end
 
