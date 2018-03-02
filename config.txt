@@ -8,7 +8,7 @@ snackbarAction=enabled
 snackbarURL=https://apps.csbsju.edu/busschedule/springbreak
 snackbarActionText=VIEW
 
-snackBarDuration=LENGTH_LONG
+snackBarDuration=LENGTH_INDEFINITE
 
 end
 
