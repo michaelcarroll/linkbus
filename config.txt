@@ -1,10 +1,10 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=enabled
+snackbar=disabled
 snackbarOutput=CAMPUS ALERT: LINK BUS NOTICE
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=https://photos.app.goo.gl/JotihmNdRCACc7nb2
 snackbarActionText=VIEW
 
