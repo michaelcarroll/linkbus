@@ -1,14 +1,14 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disabled
-snackbarOutput=
+snackbar=enabled
+snackbarOutput=Weather Alert
 
-snackbarAction=disabled
-snackbarURL=
-snackbarActionText=
+snackbarAction=enabled
+snackbarURL=https://photos.app.goo.gl/JotihmNdRCACc7nb2
+snackbarActionText=VIEW
 
-snackBarDuration=
+snackBarDuration=LENGTH_INDEFINITE
 
 end
 
