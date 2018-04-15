@@ -2,7 +2,7 @@
 
 
 snackbar=enabled
-snackbarOutput=Weather Alert
+snackbarOutput=CAMPUS ALERT: LINK BUS NOTICE
 
 snackbarAction=enabled
 snackbarURL=https://photos.app.goo.gl/JotihmNdRCACc7nb2
