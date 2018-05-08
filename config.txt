@@ -2,7 +2,7 @@
 
 
 snackbar=enabled
-snackbarOutput=Study Day
+snackbarOutput=Good luck on finals!
 
 snackbarAction=disabled
 snackbarURL=
