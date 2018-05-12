@@ -2,13 +2,13 @@
 
 
 snackbar=enabled
-snackbarOutput=Good luck on finals!
+snackbarOutput=Summer transportation info
 
-snackbarAction=disabled
-snackbarURL=
+snackbarAction=enabled
+snackbarURL=https://apps.csbsju.edu/busschedule/summervanshuttle
 snackbarActionText=VIEW
 
-snackBarDuration=LENGTH_LONG
+snackBarDuration=LENGTH_INDEFINITE
 
 end
 
