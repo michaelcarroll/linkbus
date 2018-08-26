@@ -2,13 +2,13 @@
 
 
 snackbar=enabled
-snackbarOutput=Summer transportation info
+snackbarOutput=Welcome back to Campus.
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=https://apps.csbsju.edu/busschedule/summervanshuttle
 snackbarActionText=VIEW
 
-snackBarDuration=LENGTH_INDEFINITE
+snackBarDuration=LENGTH_LONG
 
 end
 
