@@ -2,7 +2,7 @@
 
 
 snackbar=enabled
-snackbarOutput=Opening Day Schedule - Have a great first day.
+snackbarOutput=Opening Day Schedule
 
 snackbarAction=enabled
 snackbarURL=https://www.csbsju.edu/registrar/calendars/convocation
