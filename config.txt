@@ -2,10 +2,10 @@
 
 
 snackbar=enabled
-snackbarOutput=Welcome back to Campus.
+snackbarOutput=Opening Day Schedule - Have a great first day.
 
-snackbarAction=disabled
-snackbarURL=https://apps.csbsju.edu/busschedule/summervanshuttle
+snackbarAction=enabled
+snackbarURL=https://www.csbsju.edu/registrar/calendars/convocation
 snackbarActionText=VIEW
 
 snackBarDuration=LENGTH_LONG
