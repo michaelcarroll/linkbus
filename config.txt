@@ -2,10 +2,10 @@
 
 
 snackbar=enabled
-snackbarOutput=Alert: Busses running on the hour due to inclement weather
+snackbarOutput=Alert: Welcome back to campus!
 
-snackbarAction=enabled
-snackbarURL=https://photos.app.goo.gl/4ovEqvwQDngL9WBh2
+snackbarAction=disabled
+snackbarURL=
 snackbarActionText=VIEW
 
 snackBarDuration=LENGTH_INDEFINITE
