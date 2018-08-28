@@ -4,7 +4,7 @@
 snackbar=enabled
 snackbarOutput=Alert: Welcome back to campus!
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=https://www.csbsju.edu/registrar/calendars/convocation
 snackbarActionText=VIEW
 
