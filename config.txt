@@ -1,8 +1,8 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=enabled
-snackbarOutput=Welcome back to campus!
+snackbar=disabled
+snackbarOutput=
 
 snackbarAction=disabled
 snackbarURL=https://www.csbsju.edu/registrar/calendars/convocation
