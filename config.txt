@@ -1,10 +1,10 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=enabled
+snackbar=disabled
 snackbarOutput=Weather Alert
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=https://www.csbsju.edu/
 snackbarActionText=VIEW
 
