@@ -8,7 +8,7 @@ snackbarAction=disable
 snackbarURL=https://apps.csbsju.edu/busschedule/
 snackbarActionText=VIEW SCHEDULE
 
-snackBarDuration=LENGTH_INDEFINITE
+snackBarDuration=LENGTH_LONG
 
 end
 
