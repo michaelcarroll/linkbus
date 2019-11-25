@@ -1,12 +1,12 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disabled
-snackbarOutput=Weather Alert
+snackbar=enabled
+snackbarOutput=Investigating network issue -Michael
 
-snackbarAction=disabled
-snackbarURL=https://www.csbsju.edu/
-snackbarActionText=VIEW
+snackbarAction=enabled
+snackbarURL= https://apps.csbsju.edu/busschedule/
+snackbarActionText=VIEW SCHEDULE
 
 snackBarDuration=LENGTH_INDEFINITE
 
