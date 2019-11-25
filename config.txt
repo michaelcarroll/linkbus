@@ -2,9 +2,9 @@
 
 
 snackbar=enabled
-snackbarOutput=Investigating network issue -Michael
+snackbarOutput=Happy Thanksgiving! 🦃🍂
 
-snackbarAction=enabled
+snackbarAction=disable
 snackbarURL=https://apps.csbsju.edu/busschedule/
 snackbarActionText=VIEW SCHEDULE
 
