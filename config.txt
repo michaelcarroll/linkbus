@@ -5,7 +5,7 @@ snackbar=enabled
 snackbarOutput=Investigating network issue -Michael
 
 snackbarAction=enabled
-snackbarURL= https://apps.csbsju.edu/busschedule/
+snackbarURL=https://apps.csbsju.edu/busschedule/
 snackbarActionText=VIEW SCHEDULE
 
 snackBarDuration=LENGTH_INDEFINITE
