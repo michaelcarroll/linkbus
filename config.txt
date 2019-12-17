@@ -2,7 +2,7 @@
 
 
 snackbar=enabled
-snackbarOutput=Happy Thanksgiving! 🦃🍂
+snackbarOutput=Have a great break! 🎄
 
 snackbarAction=disable
 snackbarURL=https://apps.csbsju.edu/busschedule/
