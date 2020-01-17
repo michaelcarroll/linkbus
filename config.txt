@@ -2,13 +2,13 @@
 
 
 snackbar=enabled
-snackbarOutput=Welcome back!
+snackbarOutput=Weather alert
 
-snackbarAction=disable
+snackbarAction=enable
 snackbarURL=https://apps.csbsju.edu/busschedule/
-snackbarActionText=VIEW SCHEDULE
+snackbarActionText=VIEW
 
-snackBarDuration=LENGTH_LONG
+snackBarDuration=LENGTH_INDEFINITE
 
 end
 
