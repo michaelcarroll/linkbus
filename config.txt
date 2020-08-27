@@ -1,12 +1,12 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=disable
-snackbarOutput=Weather alert
+snackbar=enabled
+snackbarOutput=Face masks are required on the CSB/SJU Link.
 
-snackbarAction=disable
-snackbarURL=https://apps.csbsju.edu/busschedule/
-snackbarActionText=VIEW
+snackbarAction=enabled
+snackbarURL=https://www.csbsju.edu/covid-19
+snackbarActionText=csbsju.edu/covid-19
 
 snackBarDuration=LENGTH_INDEFINITE
 
