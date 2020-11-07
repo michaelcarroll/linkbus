@@ -8,9 +8,7 @@ App offerings for the school's bus schedule were weak and hadn't been updated fo
 
 Linkbus is currently available for Android in the [Google Play Store](https://play.google.com/store/apps/details?id=com.carroll.michael.linkbus). In the future I plan to create a solution for iOS devices.
 
-[<img src="https://user-images.githubusercontent.com/20750745/98448918-d1d99380-20ec-11eb-9262-c95ad1b957ab.png">](https://play.google.com/store/apps/details?id=com.carroll.michael.linkbus&hl=en_US)
-
-[![Foo](http://www.google.com.au/images/nav_logo7.png)](http://google.com.au/)
+[<img src="https://user-images.githubusercontent.com/20750745/98448918-d1d99380-20ec-11eb-9262-c95ad1b957ab.png" width="200">](https://play.google.com/store/apps/details?id=com.carroll.michael.linkbus&hl=en_US)
 
 ## Features
 
