@@ -1,10 +1,10 @@
 **Live** configuration file for Linkbus application...changes effect all users immediately.
 
 
-snackbar=enabled
-snackbarOutput=Face masks are required on the CSB/SJU Link.
+snackbar=disabled
+snackbarOutput=
 
-snackbarAction=enabled
+snackbarAction=disabled
 snackbarURL=https://www.csbsju.edu/covid-19
 snackbarActionText=csbsju.edu/covid-19
 
