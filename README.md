@@ -31,7 +31,3 @@ Linkbus requires Android 5.0+ (minSdkVersion 21). In the future I plan to create
 ## Feedback
 
 I appreciate all feedback as it helps the development of this project immensley. If you find any bugs or have a feature request, please [open an issue](https://github.com/MichaelCarroll/linkbus/issues/new) or send feedback using the link on [Google Play](https://play.google.com/store/apps/details?id=com.carroll.michael.linkbus). The app is now out of beta and is mostly stable for regular use, however bugs may crop up.
-
-## License
-
-[MIT License](https://raw.githubusercontent.com/michaelcarroll/linkbus/master/LICENSE)
