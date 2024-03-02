@@ -2,12 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'com.carroll.michael.linkbus'
-    compileSdkVersion 27
-    buildToolsVersion "26.0.2"
+    compileSdkVersion 34
     defaultConfig {
         applicationId "com.carroll.michael.linkbus"
-        minSdkVersion 21
-        targetSdkVersion 27
+        minSdk 24
+        targetSdk 34
         versionCode 11
         versionName "0.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
